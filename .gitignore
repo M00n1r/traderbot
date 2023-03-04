@@ -1,0 +1,5 @@
+# igonre __pycache__ directory
+__pycache__/
+
+# Ignore keys.py
+keys.py
