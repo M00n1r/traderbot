@@ -88,55 +88,55 @@ def analysePrice():
     long = 0
     
     while True:
-    try:
-        # var declaration
-        #symbol = "BTCUSDT"
-        #interval = "1d"
-        now = datetime.now()
-        date_time = now.strftime("%d/%m/%Y %H:%M:%S")
-        symbol = sys.argv[1]
-        interval = sys.argv[2]
-        bb = get_bollinger(symbol, interval)
-        
-        # Extract data in json format
-        rsi = round(float(get_rsi (symbol, interval)),2)
-        bbandsUP, bbandsMID, bbandsLOW = bb[-1]
-        bbandsUP = round(float(bbandsUP),2)
-        bbandsMID = round(float(bbandsMID),2)
-        bbandsLOW = round(float(bbandsLOW),2)
-        price = round(float(get_price (symbol)),2)
-
-        twitter = Twython(
-            API_key,
-            API_secret_key,
-            access_token,
-            access_token_secret
-        )
-        print("================= "+date_time+" =====================")
-        print(f" {symbol}: ${price} \n Timeframe: {interval}\n RSI: {rsi} \n Bbands UP: {bbandsUP} \t Mid: {bbandsMID} \t Low: {bbandsLOW} \n")
-
-
-        if (long == 0 and rsi <= 30 and price <= bbandsLOW):
-              message = date_time+ f"\n LONG  {symbol} at: ${price} \n Timeframe : {interval} \n PUMP IT !!!"
-              twitter.update_status(status=message)
-              print(f"Tweeted: "+message)
-              long = 1
-              short = 0
-        elif (short == 0 and rsi >= 70 and price <= bbandsUP):
-              message = date_time+ f"\n SHORT {symbol} at: ${price} \n Timeframe : {interval} \n DUMP IT !!!"
-              twitter.update_status(status=message)
-              print("Tweeted: "+message)
-              short = 1
-              long = 0
-
-        time.sleep(60)
-        
-    except requests.exceptions.RequestsException as e:
-        print("RequestsException : ", e)    
-    except MemoryError as e:
-        print("MemoryError : ", e)    
-    except Exception as e:
-        print("Error : ", e)
+        try:
+            # var declaration
+            #symbol = "BTCUSDT"
+            #interval = "1d"
+            now = datetime.now()
+            date_time = now.strftime("%d/%m/%Y %H:%M:%S")
+            symbol = sys.argv[1]
+            interval = sys.argv[2]
+            bb = get_bollinger(symbol, interval)
+            
+            # Extract data in json format
+            rsi = round(float(get_rsi (symbol, interval)),2)
+            bbandsUP, bbandsMID, bbandsLOW = bb[-1]
+            bbandsUP = round(float(bbandsUP),2)
+            bbandsMID = round(float(bbandsMID),2)
+            bbandsLOW = round(float(bbandsLOW),2)
+            price = round(float(get_price (symbol)),2)
+    
+            twitter = Twython(
+                API_key,
+                API_secret_key,
+                access_token,
+                access_token_secret
+            )
+            print("================= "+date_time+" =====================")
+            print(f" {symbol}: ${price} \n Timeframe: {interval}\n RSI: {rsi} \n Bbands UP: {bbandsUP} \t Mid: {bbandsMID} \t Low: {bbandsLOW} \n")
+    
+    
+            if (long == 0 and rsi <= 30 and price <= bbandsLOW):
+                message = date_time+ f"\n LONG  {symbol} at: ${price} \n Timeframe : {interval} \n PUMP IT !!!"
+                twitter.update_status(status=message)
+                print(f"Tweeted: "+message)
+                long = 1
+                short = 0
+            elif (short == 0 and rsi >= 70 and price <= bbandsUP):
+                message = date_time+ f"\n SHORT {symbol} at: ${price} \n Timeframe : {interval} \n DUMP IT !!!"
+                twitter.update_status(status=message)
+                print("Tweeted: "+message)
+                short = 1
+                long = 0
+    
+            time.sleep(60)
+            
+        except requests.exceptions.RequestsException as e:
+            print("RequestsException : ", e)    
+        except MemoryError as e:
+            print("MemoryError : ", e)    
+        except Exception as e:
+            print("Error : ", e)
 
 t1 = threading.Thread(target=analysePrice)
 t1.start()
