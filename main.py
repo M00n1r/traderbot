@@ -13,7 +13,7 @@ try:
         f.write(response.content)
 
     # Exécution du fichier avec des arguments
-    subprocess.run(["python", "traderbot.py", "1d", "BTCUSDT"])
+    subprocess.run(["python", "traderbot.py", "BTCUSDT", "1d"])
 
 except requests.exceptions.RequestException as e:
     print("Error while downloading traderbot.py : ", e)
